@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Electron + Vite Example</title>
+  </head>
+  <body>
+    <div id="app">
+      <div class="container">
+        <h1>🚀 Electron + Vite Example</h1>
+        <div class="card">
+          <h2>Welcome!</h2>
+          <p>This is a simple Electron application built with Vite.</p>
+          <div class="features">
+            <div class="feature">
+              <h3>⚡ Vite</h3>
+              <p>Lightning fast development with Hot Module Replacement</p>
+            </div>
+            <div class="feature">
+              <h3>🖥️ Electron</h3>
+              <p>Build cross-platform desktop apps with web technologies</p>
+            </div>
+            <div class="feature">
+              <h3>🔒 Secure</h3>
+              <p>Context isolation and preload scripts for security</p>
+            </div>
+          </div>
+          <div class="counter-section">
+            <h3>Interactive Counter</h3>
+            <p>Count: <span id="counter">0</span></p>
+            <button id="increment">Increment</button>
+            <button id="decrement">Decrement</button>
+            <button id="reset">Reset</button>
+          </div>
+        </div>
+        <div class="info">
+          <p>Edit <code>src/main.js</code> and save to test HMR</p>
+        </div>
+      </div>
+    </div>
+    <script type="module" src="/main.js"></script>
+  </body>
+</html>
