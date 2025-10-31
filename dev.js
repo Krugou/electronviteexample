@@ -1,11 +1,6 @@
 import { spawn } from 'child_process'
 import { createServer } from 'vite'
-import path from 'path'
-import { fileURLToPath } from 'url'
-import fs from 'fs'
-
-const __filename = fileURLToPath(import.meta.url)
-const __dirname = path.dirname(__filename)
+import { copyElectronFiles } from './utils.js'
 
 let electronProcess = null
 
@@ -26,35 +21,35 @@ async function startDev() {
   console.log('Vite dev server started at http://localhost:5173')
   
   // Copy electron files to dist-electron for development
-  const distElectronDir = path.join(__dirname, 'dist-electron')
-  if (!fs.existsSync(distElectronDir)) {
-    fs.mkdirSync(distElectronDir, { recursive: true })
-  }
-
-  fs.copyFileSync(
-    path.join(__dirname, 'electron', 'main.js'),
-    path.join(distElectronDir, 'main.js')
-  )
-  fs.copyFileSync(
-    path.join(__dirname, 'electron', 'preload.js'),
-    path.join(distElectronDir, 'preload.js')
-  )
+  copyElectronFiles()
 
   console.log('Starting Electron...')
   
-  // Start Electron
-  electronProcess = spawn('electron', ['.'], {
-    stdio: 'inherit',
-    env: {
-      ...process.env,
-      VITE_DEV_SERVER_URL: 'http://localhost:5173',
-    },
-  })
+  // Start Electron with error handling
+  try {
+    electronProcess = spawn('electron', ['.'], {
+      stdio: 'inherit',
+      env: {
+        ...process.env,
+        VITE_DEV_SERVER_URL: 'http://localhost:5173',
+      },
+    })
 
-  electronProcess.on('close', () => {
+    electronProcess.on('error', (err) => {
+      console.error('Failed to start Electron:', err)
+      server.close()
+      process.exit(1)
+    })
+
+    electronProcess.on('close', () => {
+      server.close()
+      process.exit()
+    })
+  } catch (err) {
+    console.error('Failed to spawn Electron process:', err)
     server.close()
-    process.exit()
-  })
+    process.exit(1)
+  }
 }
 
 startDev().catch((err) => {
